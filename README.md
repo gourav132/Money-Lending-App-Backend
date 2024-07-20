@@ -138,10 +138,13 @@ Attach screenshots of the results obtained from hitting the API endpoints here.
    ![Signup](img/signup_endpoint.png)
 
 2. **Login Endpoint**
-   ![Login](path/to/login_screenshot.png)
+   ![Login](img/login_endpoint.png)
 
 3. **Get User Data Endpoint**
-   ![Get User Data](path/to/get_user_data_screenshot.png)
+   ![Get User Data](img/user_endpoint.png)
 
 4. **Borrow Money Endpoint**
-   ![Borrow Money](path/to/borrow_money_screenshot.png)
+   ![Borrow Money](img/borrow_endpoint_1.png)
+   ![Borrow Money](img/borrow_endpoint_2.png)
+   ![Borrow Money](img/borrow_endpoint_3.png)
+   ![Borrow Money](img/borrow_endpoint_4.png)
