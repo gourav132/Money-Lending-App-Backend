@@ -10,8 +10,7 @@ connectDB();
 app.use(express.json({ extended: false }));
 
 // Define Routes
-app.use('/signup', require('./routes/auth'));
-app.use('/login', require('./routes/auth'));
+app.use('/Auth', require('./routes/auth'));
 app.use('/user', require('./routes/user'));
 app.use('/borrow', require('./routes/borrow'));
 

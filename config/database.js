@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
 const connectDB = async () => {
   try {
-    await mongoose.connect('mongodb+srv://gouravchatterjee65:Jamesbond007@mernprojects.2lfcugs.mongodb.net/Money-Lending-App');
+    await mongoose.connect(process.env.DATABASE_URL);
     console.log('MongoDB Connected...');
   } catch (err) {
     console.error(err.message);
