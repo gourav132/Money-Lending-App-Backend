@@ -1,22 +1,23 @@
 const express = require('express');
 const router = express.Router();
+const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { check, validationResult } = require('express-validator');
-const User = require('../models/User');
 require('dotenv').config();
+const User = require('../models/User');
 
-// @route   POST /signup
-// @desc    Register user
-// @access  Public
-router.post('/signup',
+// @route    POST api/auth/signup
+// @desc     Register user
+// @access   Public
+router.post(
+  '/signup',
   [
-    check('phone', 'Phone is required').not().isEmpty(),
+    check('phone', 'Phone number is required').not().isEmpty(),
     check('email', 'Please include a valid email').isEmail(),
     check('name', 'Name is required').not().isEmpty(),
     check('dob', 'Date of birth is required').not().isEmpty(),
-    check('monthlySalary', 'Monthly salary is required').isNumeric(),
-    check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 }),
+    check('monthlySalary', 'Monthly salary is required and should be at least 25000').isInt({ min: 25000 }),
+    check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -26,17 +27,6 @@ router.post('/signup',
 
     const { phone, email, name, dob, monthlySalary, password } = req.body;
 
-    // Check if user is above 20 years of age
-    const age = new Date().getFullYear() - new Date(dob).getFullYear();
-    if (age < 20) {
-      return res.status(400).json({ msg: 'User should be above 20 years of age' });
-    }
-
-    // Check if monthly salary is 25k or more
-    if (monthlySalary < 25000) {
-      return res.status(400).json({ msg: 'Monthly salary should be 25k or more' });
-    }
-
     try {
       let user = await User.findOne({ email });
 
@@ -44,14 +34,30 @@ router.post('/signup',
         return res.status(400).json({ msg: 'User already exists' });
       }
 
+      const currentDate = new Date();
+      const dobDate = new Date(dob);
+      const age = currentDate.getFullYear() - dobDate.getFullYear();
+      const monthDiff = currentDate.getMonth() - dobDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < dobDate.getDate())) {
+        age--;
+      }
+
+      if (age < 20) {
+        return res.status(400).json({ msg: 'User must be above 20 years of age' });
+      }
+
+      // Calculate purchase power
+      const purchasePower = monthlySalary * 2;
+
       user = new User({
         phone,
         email,
         name,
         dob,
         monthlySalary,
-        status: 'Approved',
         password,
+        purchasePower, // Set purchase power based on monthly salary
+        status: 'Approved'
       });
 
       const salt = await bcrypt.genSalt(10);
@@ -61,14 +67,14 @@ router.post('/signup',
 
       const payload = {
         user: {
-          id: user.id,
-        },
+          id: user.id
+        }
       };
 
       jwt.sign(
         payload,
         process.env.JWT_KEY,
-        { expiresIn: 360000 },
+        { expiresIn: '5 days' },
         (err, token) => {
           if (err) throw err;
           res.json({ token });

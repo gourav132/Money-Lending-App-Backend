@@ -14,10 +14,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  dateOfRegistration: {
-    type: Date,
-    default: Date.now,
-  },
   dob: {
     type: Date,
     required: true,
@@ -26,19 +22,26 @@ const UserSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  password: {
+    type: String,
+    required: true,
+  },
   status: {
     type: String,
     enum: ['Pending', 'Approved', 'Rejected'],
     default: 'Pending',
   },
-  password: {
-    type: String,
-    required: true,
+  dateOfRegistration: {
+    type: Date,
+    default: Date.now,
   },
   purchasePower: {
     type: Number,
-    default: 0,
   },
+  totalEMI: {
+    type: Number,
+    default: 0,
+  }
 });
 
 module.exports = mongoose.model('User', UserSchema);
