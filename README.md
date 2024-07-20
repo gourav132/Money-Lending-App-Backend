@@ -135,7 +135,7 @@ money-lending-app/
 Attach screenshots of the results obtained from hitting the API endpoints here.
 
 1. **Signup Endpoint**
-   ![Signup](img/signup_endpoint.jpg)
+   ![Signup](img/signup_endpoint.png)
 
 2. **Login Endpoint**
    ![Login](path/to/login_screenshot.png)
