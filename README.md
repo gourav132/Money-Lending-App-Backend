@@ -114,7 +114,7 @@ JWT_SECRET=your_jwt_secret
 money-lending-app/
 │
 ├── config/
-│   └── db.js           # Database connection configuration
+│   └── database.js           # Database connection configuration
 │
 ├── models/
 │   └── User.js         # User model
